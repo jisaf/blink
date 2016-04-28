@@ -1,4 +1,4 @@
-app.directive('videoElement', function() {
+app.directive('videoElement', function(BlinkFactory) {
     return {
         restrict: 'E',
         templateUrl: 'js/common/directives/video-element/video-element.html',
@@ -37,15 +37,17 @@ app.directive('videoElement', function() {
 
             var eyeBlinkClear;
             var blinkDebounce = true;
+            var leftDebounce = true;
+            var rightDebounce = true;
+
             function blinkEvent() {
-            	console.log('start blink');
+            	console.log('-------------start blink');
                 eyeBlinkClear = setTimeout(function() {
-                    console.log('Blink Reset********');
+                    console.log('************Reset');
                     document.getElementById('blinkLeft').innerHTML = '';
                     document.getElementById('blinkRight').innerHTML = '';
                     blinkDebounce = true;
-                    check = true;
-                }, 300);
+                }, 500);
             }
 
             function positionLoop() {
@@ -59,14 +61,14 @@ app.directive('videoElement', function() {
                         rightSumY += positions[point][1];
                     })
                     rightDiff = Math.abs(rightSumY - lastRightYVal);
-                    if(rightDiff > 18 && blinkDebounce) {
-                    	//console.log('**********blink event');
+                    if(rightDiff > 15 && rightDebounce) {
+                    	console.log('right diff', rightDiff);
                     	document.getElementById('blinkRight').innerHTML = 'Blink';
-                    	blinkDebounce = false;
-                    	blinkEvent();
+                    	rightDebounce = false;
+                    	BlinkFactory.moveLetter()
+                    	rightDebounce = BlinkFactory.debounceRight()
                     }
-                    document.getElementById('singleRight').innerHTML = "Right Eye: [" + rightSumX.toFixed(2) + "," + rightSumY.toFixed(2) + "]";
-                    document.getElementById('rightDiff').innerHTML = "Difference: [" + rightDiff.toFixed(2) + "]";
+                    BlinkFactory.displayRight(rightSumX.toFixed(2), rightSumY.toFixed(2), rightDiff.toFixed(2))
                     lastRightYVal = rightSumY;
 
 
@@ -77,18 +79,16 @@ app.directive('videoElement', function() {
                         leftSumY += positions[point][1];
                     })
                     leftDiff = Math.abs(leftSumY - lastLeftYVal);
-                    if(leftDiff > maxDiff && check) {
-                    	maxDiff = leftDiff;
-                    	console.log('**************', maxDiff);
-                    }
-                    if(leftDiff > 12 && blinkDebounce) {
-                    	console.log('**********blink event');
+                    
+                    if(leftDiff > 25 && leftDebounce) {
+                    	console.log('------before');
+                    	console.log('left diff', leftDiff);
                     	document.getElementById('blinkLeft').innerHTML = 'Blink';
-                    	blinkDebounce = false;
-                    	blinkEvent();
+                    	leftDebounce = false;
+                    	leftDebounce = BlinkFactory.debounceLeft();
+                    	console.log('-------after');
                     }
-                    document.getElementById('singleLeft').innerHTML = "Left Eye: [" + leftSumX.toFixed(2) + "," + leftSumY.toFixed(2) + "]";
-                    document.getElementById('leftDiff').innerHTML = "Difference: [" + leftDiff.toFixed(2) + "]";
+                    BlinkFactory.displayLeft(leftSumX.toFixed(2), leftSumY.toFixed(2), leftDiff.toFixed(2))
                     lastLeftYVal = leftSumY;
                     
 
@@ -101,7 +101,6 @@ app.directive('videoElement', function() {
 
             if (navigator.getUserMedia) {
                 navigator.getUserMedia({
-                    audio: true,
                     video: true
                 }, function(stream) {
                     video.src = window.URL.createObjectURL(stream);
