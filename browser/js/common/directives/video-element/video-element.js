@@ -6,6 +6,7 @@ app.directive('videoElement', function(BlinkFactory) {
             //elem.find('#webcam');
             var rightEye = [23, 63, 24, 64, 25];
             var leftEye = [28, 67, 29, 68, 30];
+            var rightArea = [63, 66, 64, 65];
             navigator.getUserMedia = navigator.getUserMedia ||
                 navigator.webkitGetUserMedia ||
                 navigator.mozGetUserMedia ||
@@ -60,6 +61,12 @@ app.directive('videoElement', function(BlinkFactory) {
                         rightSumX += positions[point][0];
                         rightSumY += positions[point][1];
                     })
+                    var length = positions[63][1] - positions[64][1]
+                    var height = positions[64][1] - positions[65][1]
+                    var area = length * height;
+                    console.log('are^^^^^^^^a', area);
+                    document.getElementById('area').innerHTML = "Area: [" + area + "]";
+
                     rightDiff = Math.abs(rightSumY - lastRightYVal);
                     if(rightDiff > 15 && rightDebounce) {
                     	console.log('right diff', rightDiff);

@@ -1,0 +1,79 @@
+<!-- SIMPLE -->
+<div class="container" id="form-container">
+  <div class="row row-centered">
+    <div class="col-xs-8 col-centered">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="form-label">Sentence:</label>
+            <input ng-model="selectedText" type="text" class="form-control">
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row row-centered">
+    <div class="col-xs-8 col-centered">
+      <ul class="list-inline letter-list" ng-model="displayLetters">
+        <li><div class='list-group-item text-center'><h2 id="prev">A</h2></div></li>
+        <li><div ng-model="selectBox" ng-class="selectBox" class='list-group-item text-center'><h2 class="selected" id="current">A</h2></div></li>
+        <li><div class='list-group-item text-center'><h2 id="next">A</h2></div></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+<div class="container">
+  <div class="row row-centered">
+    <div class="col-xs-8 col-centered">
+      <span id="blink-box">
+        <div ng-show="statusLeft" class="list-group-item-success">Left</div>
+        <div ng-hide="statusLeft" class="list-group-item-warning">Left</div>
+        <div ng-show="statusRight" class="list-group-item-success">Right</div>
+        <div ng-hide="statusRight" class="list-group-item-warning">Right</div>
+        <div ng-show="statusMouth" class="list-group-item-success">Mouth</div>
+        <div ng-hide="statusMouth" class="list-group-item-warning">Mouth</div>
+        <div ng-show="bothEyes" class="list-group-item-success">Both</div>
+        <div ng-hide="bothEyes" class="list-group-item-warning">Both</div>
+      </span>
+    </div>
+    <div class="row row-centered">
+      <div class="col-xs-6 col-centered" id="status-display">
+        <p id="baseline">Baseline:</p>
+      </div>
+    </div>
+    <div class="row row-centered" >
+      <div class="col-xs-4 col-centered" id="status-display">
+       <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(true)">inc</button>
+       <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(false)">dec</button>
+       <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(true)">inc</button>
+       <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(false)">dec</button>
+     </div>
+   </div>
+   <div class="row row-centered">
+     <div class="col-xs-6 col-centered" id="status-display">
+      <p id="areaLeft"></p>
+      <p id="areaRight"></p>
+      <p id="mouth"></p>
+    </div>
+  </div>
+  <div class="row row-centered">
+   <div class="col-xs-4 col-centered" id="status-display">
+    <span class="content-center">
+    <button id="base-btn" type="submit" class="btn btn-primary" ng-click="getBaseline()">Calibrate</button>
+    <button id="base-btn" type="submit" class="btn btn-primary" ng-click="startLetters()">Ready</button>
+    <button ng-show="running" id="base-btn" type="submit" class="btn btn-danger" ng-click="stopReading()">Stop</button>
+    </span>
+  </div>
+</div>
+</div>
+</div>
+<hr>
+<div class='large-video-wrapper'>
+
+  <video id="webcam" class="video-center" width="960px" height="720px" autoplay></video>
+  <canvas id="canvas" class="canvas-center" width="960px" height="720px"></canvas>
+
+
+</div>
+

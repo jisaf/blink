@@ -1,7 +1,43 @@
-.box {
+#blink-box {
+	width: 100%;
+	display: inline-block;
+	div {
+		display: inline-block;
+		height: 80px;
+		margin: 0px;
+		width: 24%;
+		text-align: center;
+		line-height: 80px;
+		font-size: 2em;
+		font-weight: bold;
+		color: black;
+	}
+}
+
+#form-container {
+	padding: 20px;
+}
+
+.selected-letter {
+	background-color: #5bc0de;
+	color: black;
 
 }
 
+#status-display {
+	text-align: center;
+	p {
+		display: inline-block;
+		font-size: 1.3em;
+		padding: 10px 15px;
+	}
+}
+
+.content-center {
+	display: inline-block;
+	margin: 0 auto;
+	width: 100%;
+}
 
 .panel {
 
@@ -12,7 +48,7 @@
 }
 
 
-#container{
+#video-container{
     display:inline-block;
     width:320px; 
     height:480px;
@@ -27,22 +63,23 @@
 	margin:0 auto;
 	width: 640px;
 }
+
+.large-video-wrapper {
+	margin: 0 auto;
+	width: 960px;
+	padding-bottom: 40px;
+	padding-top: 20px;
+}
 .h-label {
 	display: inline-block;
 }
 
-//Video Styling 
 
-// #container {
-// 	position : relative;
-// }
-
-// #canvas {
-// 	position : absolute;
-// 	left : 0;
-// 	top : 0;
-// }
-
+.letter-list {
+	li {
+		width: 32%;
+	}
+}
 .canvas-center {
 	margin: 0 auto;
 	position: relative;
@@ -53,4 +90,18 @@
 	margin: 0 auto;
 	display: block;
 	position: absolute;
+}
+.inline-group {
+	display: inline-block;
+	width: 100%;
+}
+.selected {
+	color: blue;
+}
+.inline-group-item {
+	display: inline-block;
+	text-align: center;
+	margin: 0;
+	width: 31%;
+	height: 100px;;
 }
