@@ -15,9 +15,9 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
 
             var letter;
             scope.selectedText = "";
-            var leftZero = 1000;
-            var rightZero = 1000;
-            var mouthZero = 1000;
+            var leftZero;
+            var rightZero;
+            var mouthZero;
             var leftDebounce = true;
             var rightDebounce = true;
             var eyeDebounce = true;
@@ -76,8 +76,8 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
             scope.getBaseline = function() {
                 scope.running = true;
                 var positions = ctracker.getCurrentPosition();
-                leftZero = BlinkFactory.getAreaLeft(positions) + 40; 
-                rightZero = BlinkFactory.getAreaRight(positions) + 40;
+                leftZero = BlinkFactory.getAreaLeft(positions) - 10; 
+                rightZero = BlinkFactory.getAreaRight(positions) - 10;
                 mouthZero = BlinkFactory.mouthDistance(positions) + 8;
                 DisplayFactory.baseline(leftZero, rightZero, mouthZero);
             }
@@ -85,6 +85,7 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                 clearInterval(intervalRead);
                 clearInterval(intervalBase);
             }
+
 
 
             function resetRight() {
@@ -111,8 +112,9 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                     mouthDebounce = true;
                 }, 800)
             }
+
+
             function resetBoth() {
-                 
                 if(scope.ready) {
                  scope.selectedText += BlinkFactory.selectLetter();
                 }
@@ -123,18 +125,68 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                     eyeDebounce = true;
                 }, 750)
             }
+            // var adjustRight;
+            // var adjustLeft;
+            // function resetTimer() {
+            //     setTimeout(function() {
+            //         console.log('finished zero');
+            //         clearInterval(adjustRight);
+            //         clearInterval(adjustLeft);
+            //     }, 5000)
+            // }
+            // function adjustZeroL() {
+            //     resetTimer();
+            //     var positions = ctracker.getCurrentPosition();
+            //     scope.maxRight = rightZero.toFixed(1)
+            //     adjustRight = setInterval(function() {
+            //         var findMax = BlinkFactory.getAreaRight(positions);
+            //         //console.log("max", findMax);
+            //         console.log('right zero', rightZero);
+            //         if(findMax > rightZero) {
+            //             rightZero = findMax + 40;
+            //             scope.maxRight = findMax.toFixed(1);
+            //         }
+
+            //     }, 50)
+            // }
+            // function adjustZeroR() {
+            //     resetTimer();
+            //     var positions = ctracker.getCurrentPosition();
+            //     scope.maxLeft = leftZero
+            //     adjustLeft = setInterval(function() {
+            //         var findMax = BlinkFactory.getAreaLeft(positions);
+            //         if(findMax > leftZero) {
+            //             console.log("zero reset");
+            //             leftZero = findMax + 40;
+            //             scope.maxLeft = findMax.toFixed(1);
+            //         }
+
+            //     }, 50)
+            // }
+            // scope.calibrateL = function() {
+            //     adjustZeroL();
+            // }
+            // scope.calibrateR = function() {
+            //     adjustZeroR();
+            // }
+            
 
             function readPositions() {
                 var positions = ctracker.getCurrentPosition();
-                var whichEye = true;
                 if (positions) {
                     var areaRight = BlinkFactory.getAreaRight(positions);
                     var areaLeft = BlinkFactory.getAreaLeft(positions);
                     var mouthLength = BlinkFactory.mouthDistance(positions);
+                    scope.testVal = BlinkFactory.getArea(positions, 17, 69, 16, 70);
+                    //scope.rightVal = areaRight.toFixed(1);
+                    // if(rightDebounce) scope.rightVal = (areaRight - rightZero).toFixed(1);
+                    // else scope.rightVal = 0;
+
+                    // if(leftDebounce) scope.leftVal = (areaLeft - leftZero).toFixed(1);
+                    // else scope.leftVal = 0;
+                    scope.mouthVal = mouthLength.toFixed(1);
                     DisplayFactory.area(areaLeft, areaRight, mouthLength);
-                    if(areaLeft - leftZero > areaRight - rightZero && leftDebounce) {
-                        whichEye = false;
-                    }
+                   
 
                     if(!rightDebounce && !leftDebounce && eyeDebounce ) {
                         scope.selectBox = "selected-letter";
@@ -142,6 +194,20 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                         scope.$digest();
                         eyeDebounce = false
                         resetBoth();
+                    }
+
+                    if (areaRight < rightZero && rightDebounce) {
+                        scope.statusRight = true;
+                        scope.$digest();
+                        resetRight();
+                        rightDebounce = false;
+                    }
+
+                    if (areaLeft < leftZero && leftDebounce) {
+                        scope.statusLeft = true;
+                        scope.$digest();
+                        resetLeft();
+                        leftDebounce = false;
                     }
 
                     // if(mouthLength > mouthZero) {
@@ -153,19 +219,26 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                     //     resetBoth();
                     // }
 
-                    if (areaRight > rightZero && rightDebounce && whichEye) {
-                        scope.statusRight = true;
-                        scope.$digest();
-                        resetRight();
-                        rightDebounce = false;
-                    }
+                    // if (areaRight > rightZero && rightDebounce && (scope.leftVal < scope.rightVal)) {
+                    //     scope.statusRight = true;
+                    //     scope.$digest();
+                    //     scope.rightVal = (areaRight - rightZero).toFixed(1);
+                    //     scope.leftVal = (areaLeft - leftZero).toFixed(1);
+                    //     if(scope.rightVal > 10) rightZero++;
+                    //     resetRight();
+                    //     rightDebounce = false;
+                    // }
 
-                    if (areaLeft > leftZero && leftDebounce && !whichEye) {
-                        scope.statusLeft = true;
-                        scope.$digest();
-                        resetLeft();
-                        leftDebounce = false;
-                    }
+                    // if (areaLeft > leftZero && leftDebounce && (scope.leftVal > scope.rightVal)) {
+                    //     scope.statusLeft = true;
+                    //     scope.rightVal = (areaRight - rightZero).toFixed(1);
+                    //     scope.leftVal = (areaLeft - leftZero).toFixed(1);
+                    //     if(scope.leftVal > 10) leftZero++;
+                    //     scope.$digest();
+                    //     resetLeft();
+                    //     leftDebounce = false;
+                    // }
+                    scope.$digest();
                 }
             }
 

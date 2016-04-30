@@ -13,6 +13,19 @@
 		color: black;
 	}
 }
+#blink-values {
+	width: 100%;
+	display: inline-block;
+	div {
+		display: inline-block;
+		height: 80px;
+		margin: 0px;
+		width: 23%;
+		text-align: center;
+		line-height: 80px;
+		color: black;
+	}
+}
 
 #form-container {
 	padding: 20px;
