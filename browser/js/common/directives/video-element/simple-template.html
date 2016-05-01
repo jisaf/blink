@@ -3,81 +3,130 @@
   <div class="row row-centered">
     <div class="col-xs-8 col-centered">
       <form class="form-horizontal">
-        <div class="form-group">
+        
+        <!-- <div class="form-group">
           <label class="form-label">Sentence:</label>
-            <input ng-model="selectedText" type="text" class="form-control">
+          <input ng-model="selectedText" type="text" class="form-control">
+        </div> -->
+        <div class="form-group">
+          <button type="submit" ng-click="details = !details" ng-init="details=true" class="btn btn-info">Toggle Details</button>
+          <button type="submit" ng-click="resetZero()" class="btn btn-warning">Reset Zero</button>
+          <button type="submit" ng-click="takeBase()" class="btn btn-primary">State</button>
+          <button type="submit" ng-click="misc()" class="btn btn-primary">Misc</button>
         </div>
+        <div class="form-group">
+          <label class="form-label">Auto:</label>
+          <input ng-model="selectedText" id="auto-form" ng-model="query"  class="form-control">
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="row row-centered">
-    <div class="col-xs-8 col-centered">
-      <ul class="list-inline letter-list" ng-model="displayLetters">
-        <li><div class='list-group-item text-center'><h2 id="prev">A</h2></div></li>
-        <li><div ng-model="selectBox" ng-class="selectBox" class='list-group-item text-center'><h2 class="selected" id="current">A</h2></div></li>
-        <li><div class='list-group-item text-center'><h2 id="next">A</h2></div></li>
-      </ul>
-    </div>
-
-  </div>
-</div>
-<div class="container">
-  <div class="row row-centered">
-    <div class="col-xs-8 col-centered">
-      <span id="blink-box">
-        <div ng-show="statusLeft" class="list-group-item-success">Left</div>
-        <div ng-hide="statusLeft" class="list-group-item-warning">Left</div>
-        <div ng-show="statusRight" class="list-group-item-success">Right</div>
-        <div ng-hide="statusRight" class="list-group-item-warning">Right</div>
-        <div ng-show="statusMouth" class="list-group-item-success">Mouth</div>
-        <div ng-hide="statusMouth" class="list-group-item-warning">Mouth</div>
-        <div ng-show="bothEyes" class="list-group-item-success">Both</div>
-        <div ng-hide="bothEyes" class="list-group-item-warning">Both</div>
-      </span>
-    </div>
-  <div class="row row-centered">
-    <div class="col-xs-8 col-centered">
-      <span id="blink-values">
-        <div  class="list-group-item-info">Left: {{leftVal}}</div>
-        <div class="list-group-item-info">Right: {{rightVal}}</div>
-        <div  class="list-group-item-info">Mouth: {{mouthVal}}</div>
-        <div class="list-group-item-info">Test: {{testVal}}</div>
-      </span>
-    </div>
-  </div>
+<span ng-hide="details">
+  <div class="container">
     <div class="row row-centered">
-      <div class="col-xs-6 col-centered" id="status-display">
-        <p id="baseline">Baseline:</p>
+      <div class="col-xs-10">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Eye</th>
+              <th>Y val</th>
+              <th>Changing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            <td>Left: {{zeroArray[0].toFixed(1)}}</td>
+            <td>Right: {{zeroArray[1].toFixed(1)}}</td>
+            </tr>
+            <tr ng-repeat="detail in rightDetails">
+              <td>Right: {{detail.toFixed(1)}}</td>
+            </tr>
+            <tr ng-repeat="detail in leftDetails">
+              <td>Left: {{detail.toFixed(1)}}</td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="row row-centered" >
-      <div class="col-xs-4 col-centered" id="status-display">
-       <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(true)">inc</button>
-       <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(false)">dec</button>
-       <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(true)">inc</button>
-       <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(false)">dec</button>
-     </div>
-   </div>
-   <div class="row row-centered">
-     <div class="col-xs-6 col-centered" id="status-display">
-      <p id="areaLeft"></p>
-      <p id="areaRight"></p>
-      <p id="mouth"></p>
+  </div>
+
+</span>
+
+
+<span ng-show="details">
+  <div class="container">
+    <div class="row row-centered">
+      <div class="col-xs-8 col-centered">
+        <ul class="list-inline letter-list" ng-model="displayLetters">
+          <li><div class='list-group-item text-center'><h2 id="prev">A</h2></div></li>
+          <li><div ng-model="selectBox" ng-class="selectBox" class='list-group-item text-center'><h2 class="selected" id="current">A</h2></div></li>
+          <li><div class='list-group-item text-center'><h2 id="next">A</h2></div></li>
+        </ul>
+      </div>
+
     </div>
   </div>
-  <div class="row row-centered">
-   <div class="col-xs-4 col-centered" id="status-display">
-    <span class="content-center">
-    <button id="base-btn" type="submit" class="btn btn-primary" ng-click="getBaseline()">Calibrate</button>
-    <button id="base-btn" type="submit" class="btn btn-primary" ng-click="startLetters()">Ready</button>
-    <button ng-show="running" id="base-btn" type="submit" class="btn btn-danger" ng-click="stopReading()">Stop</button>
-    </span>
+  <div class="container">
+    <div class="row row-centered">
+      <div class="col-xs-8 col-centered">
+        <span id="blink-box">
+          <div ng-show="statusLeft" class="list-group-item-success">Left</div>
+          <div ng-hide="statusLeft" class="list-group-item-warning">Left</div>
+          <div ng-show="statusRight" class="list-group-item-success">Right</div>
+          <div ng-hide="statusRight" class="list-group-item-warning">Right</div>
+          <div ng-show="statusBrow" class="list-group-item-success">Brow</div>
+          <div ng-hide="statusBrow" class="list-group-item-warning">Brow</div>
+          <div ng-show="statusMouth" class="list-group-item-success">Mouth</div>
+          <div ng-hide="statusMouth" class="list-group-item-warning">Mouth</div>
+          <div ng-show="bothEyes" class="list-group-item-success">Both</div>
+          <div ng-hide="bothEyes" class="list-group-item-warning">Both</div>
+        </span>
+      </div>
+    </div>
+    <hr>
+    <div class="row row-centered">
+      <div class="col-xs-8 col-centered">
+        <span id="blink-box">
+          <div  class="list-group-item-info">{{leftThres.toFixed(1)}}</div>
+          <div  class="list-group-item-info">{{rightThres.toFixed(1)}}</div>
+          <div  class="list-group-item-info">{{browThres.toFixed(1)}}</div>
+          <div  class="list-group-item-info">Mouth</div>
+          <div  class="list-group-item-info">{{eyeDiff.toFixed(1)}}</div>
+        </span>
+      </div>
+    </div>
+      <div class="row row-centered" >
+        <div class="col-xs-4 col-centered" id="status-display">
+         <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(true)">inc</button>
+         <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(false)">dec</button>
+         <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(true)">inc</button>
+         <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(false)">dec</button>
+       </div>
+     </div>
+     <div class="row row-centered">
+       <div class="col-xs-6 col-centered" id="status-display">
+        <p id="areaLeft"></p>
+        <p id="areaRight"></p>
+        <p id="mouth"></p>
+      </div>
+    </div>
+    <div class="row row-centered">
+     <div class="col-xs-4 col-centered" id="status-display">
+      <span class="content-center">
+        <button id="base-btn" type="submit" class="btn btn-primary" ng-click="getBaseline()">Calibrate</button>
+        <button id="base-btn" type="submit" class="btn btn-primary" ng-click="startLetters()">Ready</button>
+        <button ng-show="running" id="base-btn" type="submit" class="btn btn-danger" ng-click="stopReading()">Stop</button>
+      </span>
+    </div>
   </div>
+
 </div>
-</div>
-</div>
+</span>
 <hr>
 <div class='large-video-wrapper'>
 

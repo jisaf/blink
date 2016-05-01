@@ -1,11 +1,14 @@
 app.factory('BlinkFactory', function() {
-    var charArray = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    var charArray = ['XX','_','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
     var letterObj = {
-        prev: 'A',
-        current: 'B',
-        next: 'C'
+        prev: 'XX',
+        current: '_',
+        next: 'A'
     }
     var index = 2;
+    var rightArray = [23,63,24,64,25,65,26,66];
+    var leftArray = [28,67,29,68,30,69,31,70];
+    var browArray = [20,21,17,16];
    // var rightArea = [63, 66, 64, 65];
     return {
         displayLeft: function(X, Y, diff) {
@@ -17,12 +20,35 @@ app.factory('BlinkFactory', function() {
         debounceLeft: function() {
            
         },
-        debounceRight: function() {
-          
+        browPosition: function(positions) {
+            var browTotal = 0
+            browArray.forEach(function(point) {
+                browTotal += positions[point][1]
+            })
+            return browTotal
+        },
+        percentChange: function(leftZero, rightZero, browZero, positions) {
+            var leftTotal = 0;
+            var rightTotal = 0;
+            var browTotal = 0;
+            var change = 0;
+            leftArray.forEach(function(point, i) {
+                change = Math.abs(((positions[point][1] - leftZero[i]) / leftZero[i]) * 100)
+                leftTotal += change;
+            })
+            rightArray.forEach(function(point, i) {
+                change = Math.abs(((positions[point][1] - rightZero[i]) / rightZero[i]) * 100)
+                rightTotal += change;
+            })
+            browArray.forEach(function(point, i) {
+                change = Math.abs(((positions[point][1] - browZero[i]) / browZero[i]) * 100)
+                browTotal += change;
+            })
+            return [leftTotal, rightTotal, browTotal];
         },
         shiftRight: function() {
             index++;
-            if (index === 26) {
+            if (index === charArray.length) {
                 index = 0;
             }
             letterObj.prev = letterObj.current;
@@ -36,7 +62,7 @@ app.factory('BlinkFactory', function() {
         shiftLeft: function() {
             index--;
             if (index === -1) {
-                index = 25;
+                index = charArray.length - 1;
             }
             letterObj.next = letterObj.current;
             letterObj.current = letterObj.prev;
@@ -55,9 +81,6 @@ app.factory('BlinkFactory', function() {
             var height = positions[64][1] - positions[65][1]
             var area = length * height;
             return area;
-           // var top = positions[63][1] + positions[24][1] + positions[64][1];
-            // var bottom = positions[66][1] + positions[26][1] + positions[65][1];
-            //return top;
         },
         getAreaLeft: function(positions) {
             var length = positions[67][1] - positions[68][1]

@@ -1,4 +1,4 @@
-app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
+app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
     return {
         restrict: 'E',
         templateUrl: 'js/common/directives/video-element/grid-template.html',
@@ -8,13 +8,41 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
 
             scope.running = false;
             scope.ready = false;
+
+            
+
+            scope.rowSelect = true;
+            scope.letterSelect = false;
+            scope.sentence = ''
+
             scope.displayLetters = {
                 prev: 'XX',
                 current: '_',
                 next: 'A'
             }
 
-            scope.selectArray = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', 'Done', '+ Word', 'Back'];
+
+            //scope.selectArray = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', 'Done', '+ Word', 'Back'];
+            
+            scope.selectArray = [
+                ['A','B','C','D','E'],
+                ['F','G','H','I','J'],
+                ['K','L','M','N','O'],
+                ['P','Q','R','S','T'],
+                ['U','V','W','X','Y'],
+                ['Z','Back', '+ Word', '?', '?']
+            ]
+            scope.styleArray = [
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0]
+            ]
+            scope.letterIndex = 0;
+            scope.rowArray = [0,0,0,0,0,0];
+            scope.rowIndex = 0;
 
 
             scope.leftThreshold = 22;
@@ -92,24 +120,63 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                 if(converge < 5 && leftDebounce && rightDebounce && browDebounce) {
                     dynamicZero();
                 }
-                
             }
 
-
-            scope.adjustRight = function(dir) {
-                if (dir) scope.thresholdB += 1;
-                else scope.thresholdB -= 1;
-                
+            function startRow() {
+                scope.rowArray = [1,0,0,0,0,0];
+                scope.rowIndex = 0;
             }
 
-            scope.adjustLeft = function(dir) {
-                if (dir) scope.leftThreshold += 1;
-                else scope.leftThreshold -= 1;
-                
+            function selectRow(back) {
+                scope.rowArray[scope.rowIndex] = 0;
+                if(back) {
+                    scope.rowIndex--;
+                    if(scope.rowIndex === -1) scope.rowIndex = scope.rowArray.length - 1;
+                    scope.rowArray[scope.rowIndex] = 1;
+                }
+                else {
+                    scope.rowIndex++;
+                    if(scope.rowIndex === scope.rowArray.length) scope.rowIndex = 0;
+                    scope.rowArray[scope.rowIndex] = 1;
+                }
             }
+
+            function selectLetter() {
+                scope.styleArray[scope.rowIndex][scope.letterIndex] = 0;
+                scope.letterIndex++;
+                if(scope.letterIndex > 4) scope.letterIndex = 0;
+                scope.styleArray[scope.rowIndex][scope.letterIndex] = 1;
+            }
+
+            function resetRow() {
+                scope.rowArray[scope.rowIndex] = 1;
+                scope.styleArray[scope.rowIndex][scope.letterIndex] = 0
+                scope.letterIndex = 0;
+                scope.rowSelect = true;
+                scope.letterSelect = false;
+            }
+
+            function pushLetter() {
+                var newLetter = scope.selectArray[scope.rowIndex][scope.letterIndex];
+                if(newLetter === 'Space') {
+                    scope.selectedText += ' '
+                }
+                else if(newLetter === 'Back') {
+                   scope.selectedText = scope.selectedText.substring(0, scope.selectedText.length - 1);
+                }
+                else if (newLetter === '+ Word') {
+                    scope.sentence += ' ' + scope.selectedText;
+                    scope.selectedText = "";
+                }
+                else {
+                    scope.selectedText += newLetter
+                }
+            }
+
 
             scope.startLetters = function() {
                 scope.ready = true;
+                startRow();
             }
 
 
@@ -121,7 +188,8 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
 
 
             function resetRight() {
-                if (scope.ready) BlinkFactory.shiftRight();
+                if (scope.ready && scope.rowSelect) selectRow();
+                if (scope.ready && scope.letterSelect) selectLetter();
                 setTimeout(function() {
                     scope.statusRight = false;
                     scope.$digest();
@@ -129,8 +197,10 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                 }, 200)
             }
 
+
             function resetLeft() {
-                if (scope.ready) BlinkFactory.shiftLeft();
+                if (scope.ready && scope.rowSelect) selectRow(true);
+                if (scope.ready && scope.letterSelect) resetRow();
                 setTimeout(function() {
                     scope.statusLeft = false;
                     scope.$digest();
@@ -154,16 +224,6 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
             }
 
             function resetMouth() {
-                // if(scope.ready) {
-                //     var nextLetter = BlinkFactory.selectLetter();
-                //     if(nextLetter === 'XX') {
-                //         scope.selectedText = scope.selectedText.substring(0, scope.selectedText.length - 1);
-                //     }
-                //     else {
-                //         scope.selectedText += nextLetter
-                //     }
-                    
-                // }
                 setTimeout(function() {
                     // if(!scope.ready) dynamicZero()
                     // else scope.selectBox = "";
@@ -173,36 +233,27 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
                 }, 700)
             }
 
-            function resetBoth() {
-                if(scope.ready) {
-                    var nextLetter = BlinkFactory.selectLetter();
-                    if(nextLetter === 'XX') {
-                        scope.selectedText = scope.selectedText.substring(0, scope.selectedText.length - 1);
-                    }
-                    else {
-                        scope.selectedText += nextLetter
-                    }
-                }
-                setTimeout(function() {
-                    scope.bothEyes = false;
-                    scope.selectBox = "";
-                    scope.$digest();
-                    eyeDebounce = true;
-                }, 750)
-            }
-
             function resetBrow() {
                 if(scope.ready) {
-                    var nextLetter = BlinkFactory.selectLetter();
-                    if(nextLetter === 'XX') {
-                        scope.selectedText = scope.selectedText.substring(0, scope.selectedText.length - 1);
+                    if(scope.rowSelect) {
+                        scope.rowSelect = false;
+                        scope.letterSelect = true;
+                        scope.rowArray[scope.rowIndex] = 0;
+                        scope.styleArray[scope.rowIndex][0] = 1;
                     }
-                    else {
-                        scope.selectedText += nextLetter
+                    else if(scope.letterSelect) {
+                        scope.letterInput = 'letter-success';
+                        pushLetter();
+                        scope.styleArray[scope.rowIndex][scope.letterIndex] = 0;
+                        scope.letterSelect = false;
+                        scope.rowSelect = true;
+                        startRow();
+                        scope.letterIndex = 0;
                     }
                 }
                 setTimeout(function() {
                     scope.statusBrow = false;
+                    scope.letterInput = '';
                     scope.selectBox = "";
                     scope.$digest();
                     browDebounce = true;
@@ -238,15 +289,6 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
             }
             
 
-            scope.misc = function() {
-                var params = ctracker.getCurrentParameters();
-                var converge = ctracker.getConvergence();
-                var score = ctracker.getScore();
-            }
-
-
-
-
             function findZero() {
                 var positions = ctracker.getCurrentPosition();
                 if (positions) {
@@ -280,10 +322,9 @@ app.directive('simpleVideo', function(BlinkFactory, DisplayFactory) {
 
                 if(scope.mouthThres > 0 && mouthDebounce) {
                     scope.statusMouth = true;
-                    if(!scope.ready) {
-                        scope.ready = true;
-                    }
-                    //else scope.selectBox = "selected-letter";
+                    // if(!scope.ready) {
+                    //     scope.ready = true;
+                    // }
                     resetMouth();
                     mouthDebounce = false;
                 }
