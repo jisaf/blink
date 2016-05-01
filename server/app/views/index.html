@@ -12,12 +12,16 @@
     <script src="/angular/angular.js"></script>
     <script src="/angular-animate/angular-animate.js"></script>
     <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/angular-szn-autocomplete-build/src/angular-szn-autocomplete.js"></script>
+    <link rel="stylesheet" href="/auto-complete.css"></link>
     <script src="/angular-ui-bootstrap/ui-bootstrap.js"></script>
     <script src="/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/socket.io-client/socket.io.js"></script>
     <script src="/modernizr-custom.js"></script>
     <script src="/modernizr-custom-alt.js"></script>
     <script src="/examples/ext_js/utils.js"></script>
+    <script src="/clmtrackr.js"></script>
+    <script src="/auto-complete.js"></script>
     <script src="/clmtrackr.js"></script>
     <script src="/models/model_pca_20_svm.js"></script>
     <script src="/main.js"></script>
@@ -29,110 +33,8 @@
 
 <navbar></navbar>
 <div id="main" ui-view></div>
-<!-- <div id="container">
-<video id="video" width="640" height="480" autoplay></video>
-<button id="snap">Snap Photo</button>
-<canvas id="canvas" width="640" height="480"></canvas>
-<p>Printing coordinates of the first 10 points in facial features:</p>
-      <p id="positions"></p>
-      </div> -->
-<script>
-// window.addEventListener("DOMContentLoaded", function() {
-//     // Grab elements, create settings, etc.
-//     video = document.getElementById("video"),
-//         videoObj = { "video": true },
-//         errBack = function(error) {
-//             console.log("Video capture error: ", error.code); 
-//         };
 
-//     // Put video listeners into place
-//     var ctracker = new clm.tracker();
-//     ctracker.init(pModel);
-//     ctracker.start(video);
 
-//     function drawLoop() {
-//           requestAnimationFrame(drawLoop);
-//           context.clearRect(0, 0, canvas.width, canvas.height);
-//           ctracker.draw(canvas);
-//         }
-//     function positionLoop() {
-//           requestAnimationFrame(positionLoop);
-//           var positions = ctracker.getCurrentPosition();
-//           // do something with the positions ...
-//           // print the positions
-//           var positionString = "";
-//           if (positions) {
-//             for (var p = 0;p < 10;p++) {
-//               positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
-//             }
-//             document.getElementById('positions').innerHTML = positionString;
-//           }
-//         }
-//         var canvas = document.getElementById("canvas"),
-//         context = canvas.getContext("2d")
-       
-        
-//     if (navigator.webkitGetUserMedia) { // WebKit-prefixed
-//         navigator.webkitGetUserMedia(videoObj, function(stream){
-//             video.src = window.webkitURL.createObjectURL(stream);
-//             console.log('heheee2222222');
-//             video.play();
-//             positionLoop();
-//             drawLoop();
-            
-//         }, errBack);
-//     }
-//     else if(navigator.mozGetUserMedia) { // Firefox-prefixed
-//         navigator.mozGetUserMedia(videoObj, function(stream){
-//             video.src = window.URL.createObjectURL(stream);
-//             console.log('heheee333333');
-//             video.play();
-//         }, errBack);
-//     }
-//     }, false);
-</script>
-    <!-- <div id="content">
-            <h2>Example</h2>
-      <div id="container">
-        <video id="video" width="368" height="288" autoplay loop>
-          <source src="/examples/media/franck.ogv" type="video/ogg"/>
-        </video>
-        <canvas id="canvas" width="368" height="288"></canvas>
-      </div>
-      <p>Printing coordinates of the first 10 points in facial features:</p>
-      <p id="positions"></p>
-            <script>
-                var videoInput = document.getElementById('video');
-        
-        var ctracker = new clm.tracker();
-        ctracker.init(pModel);
-        ctracker.start(videoInput);
-                
-                function positionLoop() {
-          requestAnimationFrame(positionLoop);
-          var positions = ctracker.getCurrentPosition();
-          // do something with the positions ...
-          // print the positions
-          var positionString = "";
-          if (positions) {
-            for (var p = 0;p < 10;p++) {
-              positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
-            }
-            document.getElementById('positions').innerHTML = positionString;
-          }
-        }
-        positionLoop();
-                
-                var canvasInput = document.getElementById('canvas');
-                var cc = canvasInput.getContext('2d');
-                function drawLoop() {
-          requestAnimationFrame(drawLoop);
-          cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-          ctracker.draw(canvasInput);
-        }
-        drawLoop();
-            </script>
-        </div> -->
 
 </body>
 </html>
