@@ -46,9 +46,9 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             scope.rowIndex = 0;
 
 
-            scope.leftThreshold = 20;
+            scope.leftThreshold = 23;
             scope.thresholdB = 20;
-            scope.browThreshold = 18;
+            scope.browThreshold = 25;
             scope.mouthThreshold = 15;
 
             scope.selectedText = "";
@@ -113,7 +113,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
 
             var scoreInterval;
             function getScore() {
-                scoreInterval = setInterval(updateZero, 1000)
+                scoreInterval = setInterval(updateZero, 1500)
             }
 
             function updateZero() {
