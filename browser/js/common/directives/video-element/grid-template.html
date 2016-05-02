@@ -1,4 +1,9 @@
 <!-- SIMPLE -->
+<div class="col-xs-12" id="image-stable" ng-hide="imageStable">
+  <p>Hold Still:</p>
+  <p class="second-line"><small>{{conv.toFixed(1)}}</small></p>
+</div>
+
 <div class="container" id="form-container">
   <div class="row row-centered">
     <div class="col-xs-8 col-centered">
@@ -132,12 +137,13 @@
 
 </div>
 
-<hr>
-<div class='large-video-wrapper'>
 
-  <video id="webcam" class="video-center" width="960px" height="720px" autoplay></video>
-  <canvas id="canvas" class="canvas-center" width="960px" height="720px"></canvas>
+<div class='small-video-wrapper'>
+
+  <video id="webcam" class="video-center" width="1170px" height="877.5px" autoplay></video>
+  <canvas id="canvas" class="canvas-center" width="1170px" height="877.5px"></canvas>
 
 
 </div>
+
 

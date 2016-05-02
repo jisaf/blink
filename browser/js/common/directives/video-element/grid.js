@@ -8,6 +8,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
 
             scope.running = false;
             scope.ready = false;
+            scope.imageStable = false;
 
             
 
@@ -45,9 +46,9 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             scope.rowIndex = 0;
 
 
-            scope.leftThreshold = 22;
-            scope.thresholdB = 22;
-            scope.browThreshold = 30;
+            scope.leftThreshold = 20;
+            scope.thresholdB = 20;
+            scope.browThreshold = 18;
             scope.mouthThreshold = 15;
 
             scope.selectedText = "";
@@ -112,13 +113,46 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
 
             var scoreInterval;
             function getScore() {
-                scoreInterval = setInterval(readScore, 2000)
+                scoreInterval = setInterval(updateZero, 1000)
             }
 
-            function readScore() {
+            function updateZero() {
                 var converge = ctracker.getConvergence();
-                if(converge < 5 && leftDebounce && rightDebounce && browDebounce) {
+                if(converge < 10 && leftDebounce && rightDebounce && browDebounce) {
                     dynamicZero();
+                }
+            }
+
+
+            var initiateInterval;
+            var count = 0;
+            var negativeCount = 0;
+            function initialize() {
+                initiateInterval = setInterval(stableFace, 200)
+            }
+
+            function stableFace() {
+                var converge = ctracker.getConvergence();
+                scope.conv = converge
+                if(converge < 300) {
+                    count++;
+                    if(count > 20) {
+                        scope.imageStable = true;
+                        scope.takeBase();
+                    }
+                }
+                else if (scope.imageStable && converge > 1000) {
+                    negativeCount++
+                    if(negativeCount > 10) {
+                        scope.imageStable = false;
+                        clearInterval(intervalRead);
+                        negativeCount = 0;
+                        count = 0;
+                    }
+                }
+                else {
+                   negativeCount = 0;
+                   count = 0;
                 }
             }
 
@@ -219,14 +253,12 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                     });
                     browZeroArray = browArray.map(function(index) {
                         return positions[index][1]
-                    })
+                    });
                 }
             }
 
             function resetMouth() {
                 setTimeout(function() {
-                    // if(!scope.ready) dynamicZero()
-                    // else scope.selectBox = "";
                     scope.statusMouth = false;
                     mouthDebounce = true;
                     scope.$digest();
@@ -257,7 +289,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                     scope.selectBox = "";
                     scope.$digest();
                     browDebounce = true;
-                }, 500)
+                }, 700)
             }
 
 
@@ -269,7 +301,6 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                 takeReading();
                 getScore();
                 clearInterval(calibrateInterval)
-
             }
 
 
@@ -342,14 +373,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                     var leftDiff = scope.zeroArray[0] - scope.leftThreshold 
                     var rightDiff = scope.zeroArray[1] - scope.thresholdB 
                     scope.eyeDiff = (Math.abs(leftDiff - rightDiff) / (scope.leftThreshold + scope.thresholdB)) * 100;
-                    
-                    // if(Math.abs(leftDiff - rightDiff) < 0.25) {
-                    //     scope.selectBox = "selected-letter";
-                    //     scope.bothEyes = true;
-                    //     scope.$digest();
-                    //     eyeDebounce = false
-                    //     resetBoth();
-                    // }
+                  
                     if (scope.leftThres > scope.rightThres && leftDebounce) {
                         scope.statusLeft = true;
                         scope.$digest();
@@ -387,6 +411,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             function positionLoop() {
                 requestAnimationFrame(positionLoop);
                 var positions = ctracker.getCurrentPosition();
+                
 
             }
             getScore();
@@ -397,6 +422,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                 navigator.getUserMedia({
                     video: true
                 }, function(stream) {
+                    initialize();
                     video.src = window.URL.createObjectURL(stream);
                     console.log('video load');
                     positionLoop();

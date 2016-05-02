@@ -104,6 +104,33 @@ $blue: #9CD3CD;
 	min-height: 500px;
 }
 
+#image-stable {
+	height: 877.5px;
+	//opacity: 0.4;
+	position: absolute;
+	top: 0px;
+	z-index: 50;
+	background-color: rgba(242, 222, 222, 0.6);
+	border: 1px solid $dark;
+
+	text-align: center;
+	line-height: 877.5px;
+	p {
+		font-weight: bold;
+		font-size: 5em;
+		opacity: 1;
+		color: $dark;
+	}
+
+}
+.second-line {
+	position: relative;
+	top: -800px;
+	font-size: 0.75em;
+	font-weight: 0.75em;
+	
+}
+
 
 #video-container{
     display:inline-block;
@@ -119,6 +146,13 @@ $blue: #9CD3CD;
 .video-wrapper {
 	margin:0 auto;
 	width: 640px;
+}
+
+.small-video-wrapper {
+	margin: 0 auto;
+	width: 1170px;
+	padding-bottom: 40px;
+	padding-top: 20px;
 }
 
 .large-video-wrapper {
