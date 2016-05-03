@@ -128,9 +128,14 @@
 <div class="row row-centered">
  <div class="col-xs-4 col-centered" id="status-display">
   <span class="content-center">
+        <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(true)">inc</button>
+         <button id="base-btn" type="submit" class="btn btn-info" ng-click="adjustLeft(false)">dec</button>
     <button type="submit" ng-click="takeBase()" class="btn btn-primary">Ready</button>
     <button id="base-btn" type="submit" class="btn btn-primary" ng-click="startLetters()">Start</button>
     <button ng-show="running" id="base-btn" type="submit" class="btn btn-danger" ng-click="stopReading()">Stop</button>
+
+         <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(true)">inc</button>
+         <button id="base-btn" type="submit" class="btn btn-primary" ng-click="adjustRight(false)">dec</button>
   </span>
 </div>
 </div>

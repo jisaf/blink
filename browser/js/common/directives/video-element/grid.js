@@ -10,7 +10,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             scope.ready = false;
             scope.imageStable = false;
 
-            
+
 
             scope.rowSelect = true;
             scope.letterSelect = false;
@@ -24,7 +24,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
 
 
             //scope.selectArray = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', 'Done', '+ Word', 'Back'];
-            
+
             scope.selectArray = [
                 ['A','B','C','D','E'],
                 ['F','G','H','I','J'],
@@ -52,17 +52,17 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             scope.mouthThreshold = 15;
 
             scope.selectedText = "";
-            
+
 
             var letter;
             var leftZero;
             var rightZero;
             var mouthZero;
-            
+
             var leftZeroArray = [];
             var rightZeroArray = [];
             var browZeroArray = [];
-            
+
             scope.rightDetails = [];
             scope.leftDetails = [];
 
@@ -116,6 +116,16 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                 scoreInterval = setInterval(updateZero, 1500)
             }
 
+            var pupilInterval;
+            function getpupil() {
+
+                pupilInterval = setInterval(function() {
+                    var positions = ctracker.getCurrentPosition();
+                    console.log('x:', positions[32][0])
+                    console.log('y:', positions[32][1])
+                }, 50)
+            }
+
             function updateZero() {
                 var converge = ctracker.getConvergence();
                 if(converge < 10 && leftDebounce && rightDebounce && browDebounce) {
@@ -129,6 +139,18 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             var negativeCount = 0;
             function initialize() {
                 initiateInterval = setInterval(stableFace, 200)
+            }
+
+            scope.adjustRight = function(dir) {
+                if (dir) scope.thresholdB += 1;
+                else scope.thresholdB -= 1;
+
+            }
+
+            scope.adjustLeft = function(dir) {
+                if (dir) scope.leftThreshold += 1;
+                else scope.leftThreshold -= 1;
+
             }
 
             function stableFace() {
@@ -209,6 +231,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
 
 
             scope.startLetters = function() {
+                getpupil();
                 scope.ready = true;
                 startRow();
             }
@@ -258,6 +281,9 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             }
 
             function resetMouth() {
+                console.log('left', leftZeroArray)
+                console.log('right', rightZeroArray)
+                console.log('brow', browZeroArray)
                 setTimeout(function() {
                     scope.statusMouth = false;
                     mouthDebounce = true;
@@ -318,7 +344,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                     })
                 }
             }
-            
+
 
             function findZero() {
                 var positions = ctracker.getCurrentPosition();
@@ -369,17 +395,17 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                         resetBrow();
                 }
                 if ((scope.leftThres > 0) && (scope.rightThres > 0) && rightDebounce && leftDebounce && eyeDebounce) {
-                    
-                    var leftDiff = scope.zeroArray[0] - scope.leftThreshold 
-                    var rightDiff = scope.zeroArray[1] - scope.thresholdB 
+
+                    var leftDiff = scope.zeroArray[0] - scope.leftThreshold
+                    var rightDiff = scope.zeroArray[1] - scope.thresholdB
                     scope.eyeDiff = (Math.abs(leftDiff - rightDiff) / (scope.leftThreshold + scope.thresholdB)) * 100;
-                  
+
                     if (scope.leftThres > scope.rightThres && leftDebounce) {
                         scope.statusLeft = true;
                         scope.$digest();
                         resetLeft();
                         leftDebounce = false;
-                    } 
+                    }
                     else if(rightDebounce) {
                         scope.statusRight = true;
                         scope.$digest();
@@ -387,7 +413,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
                         rightDebounce = false;
                     }
                 }
-              
+
                 scope.$digest();
             }
 
@@ -411,7 +437,7 @@ app.directive('gridVideo', function(BlinkFactory, DisplayFactory) {
             function positionLoop() {
                 requestAnimationFrame(positionLoop);
                 var positions = ctracker.getCurrentPosition();
-                
+
 
             }
             getScore();

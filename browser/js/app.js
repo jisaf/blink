@@ -1,5 +1,5 @@
 'use strict';
-window.app = angular.module('Blink', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', "angular-szn-autocomplete"]);
+window.app = angular.module('Blink', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)

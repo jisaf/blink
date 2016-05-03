@@ -39,14 +39,12 @@ app.directive('gridVideo', function(BlinkFactory2) {
             scope.rowIndex = 0;
 
 
-            //threshold for detection 
+            //threshold for detection
             scope.leftThreshold = 23;
             scope.browThreshold = 25;
             scope.mouthThreshold = 15;
             scope.thresholdB = 20;
             //yeahhh, this is the right threshold. I had a weird problem.
-
-
 
             var mouthZero;
             var leftZeroArray = [];
@@ -129,7 +127,7 @@ app.directive('gridVideo', function(BlinkFactory2) {
                         scope.imageStable = true; //this changes the 'ng-hide' value so the overlay goes away
                         scope.takeBase(); //starts taking base reading
                     }
-                } else if (scope.imageStable && converge > 1000) { //last mimute implementation of what to do if the subject became out of focus 
+                } else if (scope.imageStable && converge > 1000) { //last mimute implementation of what to do if the subject became out of focus
                     negativeCount++
                     if (negativeCount > 10) {
                         scope.imageStable = false;
@@ -274,7 +272,7 @@ app.directive('gridVideo', function(BlinkFactory2) {
                     } else if (scope.letterSelect) { //if the user is selecting the letter
                         scope.letterInput = 'letter-success'; //changes css
                         pushLetter(); //pushes letter into input
-                        scope.styleArray[scope.rowIndex][scope.letterIndex] = 0; //reset index of row and column 
+                        scope.styleArray[scope.rowIndex][scope.letterIndex] = 0; //reset index of row and column
                         scope.letterSelect = false; //letter is not ready to select
                         scope.rowSelect = true;
                         startRow(); //reset row select
@@ -378,8 +376,8 @@ app.directive('gridVideo', function(BlinkFactory2) {
 
                 if ((scope.leftThres > 0) && (scope.rightThres > 0) && rightDebounce && leftDebounce) {
 
-                    //var leftDiff = scope.zeroArray[0] - scope.leftThreshold 
-                    //var rightDiff = scope.zeroArray[1] - scope.thresholdB 
+                    //var leftDiff = scope.zeroArray[0] - scope.leftThreshold
+                    //var rightDiff = scope.zeroArray[1] - scope.thresholdB
                     //scope.eyeDiff = (Math.abs(leftDiff - rightDiff) / (scope.leftThreshold + scope.thresholdB)) * 100; //originally used to check different between eyes, if close, both eyes active
 
                     if (scope.leftThres > scope.rightThres && leftDebounce) {
@@ -404,8 +402,6 @@ app.directive('gridVideo', function(BlinkFactory2) {
             function positionLoop() {
                 requestAnimationFrame(positionLoop);
                 var positions = ctracker.getCurrentPosition();
-
-
             }
 
 
