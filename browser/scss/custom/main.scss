@@ -1,15 +1,28 @@
-$success: rgba(155, 222, 172, 0.3);
+$success: rgba(155, 222, 172, 0.6);
 $dark: #000411;
 $light: #FCF4EF;
 $grey: #454851;
 $border: #6D938F;
 $blue: #9CD3CD;
 
+#grid-row {
+div{
+    line-height: 250px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.8em;
+}
+}
+
 
 
 .grid-item {
     height: 250px;
     border: 1px solid $dark;
+}
+
+#grid-center {
+    line-height: 20px;
 }
 
 
@@ -61,7 +74,9 @@ $blue: #9CD3CD;
 }
 
 .active-box {
-	background-color: $success
+	background-color: $success;
+    box-shadow: 0 15px 15px $dark;
+    z-index: 10;
 }
 #blink-values {
 	div {

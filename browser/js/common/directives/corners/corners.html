@@ -1,20 +1,22 @@
 <div class="container">
-<div class="row row-centered">
-    <div class="col-xs-4 grid-item"></div>
-    <div class="col-xs-4 grid-item"></div>
-    <div class="col-xs-4 grid-item"></div>
+<div class="row row-centered" id="grid-row">
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[0]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[1]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[2]}">X</div>
 </div>
-<div class="row row-centered">
-    <div class="col-xs-4 grid-item">{{lefteyeX.toFixed(0)}},{{lefteyeY.toFixed(0)}}</div>
-    <div class="col-xs-4 grid-item"></div>
-    <div class="col-xs-4 grid-item">{{righteyeX.toFixed(0)}},{{righteyeY.toFixed(0)}}</div>
+<div class="row row-centered" id="grid-row">
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[7]}">X</div>
+    <div class="col-xs-4 grid-item" id="grid-center"><button class="btn btn-primary" ng-click="zero()">Zero</button>X:{{eyeX.toFixed(0)}}, Y:{{eyeY.toFixed(0)}}</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[3]}">X</div>
 </div>
-<div class="row row-centered">
-    <div class="col-xs-4 grid-item"></div>
-    <div class="col-xs-4 grid-item"></div>
-    <div class="col-xs-4 grid-item"></div>
+<div class="row row-centered" id="grid-row">
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[4]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[5]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[6]}">X</div>
 </div>
 </div>
+
+
 
 <div class='grid-video-wrapper'>
   <video id="webcam" class="video-center" width="800px" height="600px" autoplay></video>
