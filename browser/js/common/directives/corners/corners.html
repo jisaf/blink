@@ -1,18 +1,18 @@
 <div class="container">
 <div class="row row-centered" id="grid-row">
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[0]}">X</div>
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[1]}">X</div>
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[2]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[0]}"><bl-box contents="boxes[0]"></bl-box></div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[1]}"></div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[2]}"><bl-box contents=boxes[1]></bl-box></div>
 </div>
 <div class="row row-centered" id="grid-row">
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[7]}">X</div>
-    <div class="col-xs-4 grid-item" id="grid-center"><button class="btn btn-primary" ng-click="zero()">Zero</button>X:{{eyeX.toFixed(0)}}, Y:{{eyeY.toFixed(0)}}</div>
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[3]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[7]}"><button class="btn btn-primary" ng-click="zero()">Zero</button>X:{{eyeX.toFixed(0)}}, Y:{{eyeY.toFixed(0)}}</div>
+    <div class="col-xs-4 grid-item" id="grid-center"><bl-box contents=boxes[2]></bl-box></div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[3]}"><button class="btn btn-primary" ng-click="select()">Select</button></div>
 </div>
 <div class="row row-centered" id="grid-row">
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[4]}">X</div>
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[5]}">X</div>
-    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[6]}">X</div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[6]}"><bl-box contents=boxes[3]></bl-box></div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[5]}"></div>
+    <div class="col-xs-4 grid-item" ng-class="{'active-box': box[4]}"><bl-box contents=boxes[4]></bl-box></div>
 </div>
 </div>
 

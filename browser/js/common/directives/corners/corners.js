@@ -6,6 +6,7 @@ app.directive('corners', function() {
         templateUrl: 'js/common/directives/corners/corners.html',
         link: function(scope) {
 
+
             scope.log = function(){
                 console.log("Left", scope.lefteyeX.toFixed(1),scope.lefteyeY.toFixed(1))
                 //console.log("Right",scope.righteyeX.toFixed(1),scope.righteyeY.toFixed(1))
@@ -51,7 +52,32 @@ app.directive('corners', function() {
             var canvas = document.getElementById("canvas");
             var context = canvas.getContext("2d");
 
+
+            //Config boxes and letters.
             scope.box = [0, 0, 0, 0, 0, 0, 0, 0]
+            scope.TLBox = ["A", "B", "C", "D", "E", ""];
+            scope.TRBox = ["F", "G", "H", "I", "J", ""];
+            scope.MMBox = ["K", "L", "M", "N", "O", ""];
+            scope.BLBox = ["P", "Q", "R", "S", "T", ""];
+            scope.BRBox = ["U", "V", "W", "X", "Y", "Z"];
+
+            let defaultBoxes = [scope.TLBox, scope.TRBox, scope.MMBox, scope.BLBox, scope.BRBox];
+            scope.boxes = defaultBoxes
+            console.log("do you reset", scope.boxes)
+            //Select a box or letter
+            scope.select = function(){
+                console.log(scope.boxes)
+                if(scope.boxes !== defaultBoxes){
+                    console.log(1)
+                    scope.boxes=defaultBoxes;
+                } else {
+                    console.log(2)
+                    let current = scope.box.indexOf(1)
+                    console.log("current", current)
+                    scope.boxes = defaultBoxes[current]
+                    console.log("boxes", scope.boxes.toString())
+                }
+            }
 
 
             function eyePosition(){
